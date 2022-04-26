@@ -10,22 +10,26 @@ import {
   Redirect,
 } from '@nestjs/common';
 import { Observable, of } from 'rxjs';
+import { CatsService } from './cats.service';
 import { CreateCatDto } from './dto/create-cat.dto';
+import { Cat } from './interfaces/cat.interface';
 
 // @Controller({ host: 'cats.example.com' }) // サブドメインの場合は、こんな感じすれば良いらしい
 
 @Controller('cats')
 export class CatsController {
+  constructor(private catsService: CatsService) {}
+
   @Post()
   @HttpCode(204)
   @Header('Cache-Control', 'none')
-  create(@Body() createCatDto: CreateCatDto): string {
-    return `This actions adds a new cat: ${createCatDto}`;
+  create(@Body() createCatDto: CreateCatDto): void {
+    this.catsService.create(createCatDto);
   }
 
   @Get()
-  findAll(): string {
-    return 'This action returns all cats';
+  findAll(): Cat[] {
+    return this.catsService.findAll();
   }
 
   @Get('ab*cd')
