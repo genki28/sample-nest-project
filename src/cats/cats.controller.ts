@@ -4,12 +4,15 @@ import {
   Get,
   Header,
   HttpCode,
+  // HttpException,
+  // HttpStatus,
   Param,
   Post,
   Query,
   Redirect,
 } from '@nestjs/common';
 import { Observable, of } from 'rxjs';
+import { ForbiddenException } from '../common/exceptions/forbidden.exception';
 import { CatsService } from './cats.service';
 import { CreateCatDto } from './dto/create-cat.dto';
 import { Cat } from './interfaces/cat.interface';
@@ -49,6 +52,19 @@ export class CatsController {
 
   @Get(':id')
   findOne(@Param() params): string {
+    if (!params.id) {
+      // throw new HttpException('Forbidden', HttpStatus.FORBIDDEN);
+      // 以下みたいにオーバーライドすることも可能
+      // だが、カスタムするなら独自の例外階層を作成した方が良いみたい! 例: forbidden.exception.tsを作るとか
+      // throw new HttpException(
+      //   {
+      //     status: HttpStatus.FORBIDDEN,
+      //     error: 'This is a custom message',
+      //   },
+      //   HttpStatus.FORBIDDEN,
+      // );
+      throw new ForbiddenException();
+    }
     return `This actions returns a #${params.id} cat`;
   }
 
