@@ -4,14 +4,22 @@ import {
   NestModule,
   // RequestMethod,
 } from '@nestjs/common';
-import { CatsController } from './cats/cats.controller';
+import { APP_FILTER } from '@nestjs/core';
+// import { CatsController } from './cats/cats.controller';
 import { CatsModule } from './cats/cats.module';
+import { HttpExceptionFilter } from './common/exceptions/http-exception.filter';
 import {
   // LoggerMiddleware,
   logger,
 } from './common/middleware/logger.middleware';
 
 @Module({
+  providers: [
+    {
+      provide: APP_FILTER,
+      useClass: HttpExceptionFilter,
+    },
+  ],
   imports: [CatsModule],
 })
 export class AppModule implements NestModule {
