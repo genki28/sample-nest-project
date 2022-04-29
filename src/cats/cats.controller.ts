@@ -12,16 +12,13 @@ import {
   Query,
   Redirect,
   UseFilters,
-  UsePipes,
   ValidationPipe,
 } from '@nestjs/common';
-import { Observable, of } from 'rxjs';
 import { HttpExceptionFilter } from '../common/exceptions/http-exception.filter';
 import { ForbiddenException } from '../common/exceptions/forbidden.exception';
 import { CatsService } from './cats.service';
 import { CreateCatDto } from './dto/create-cat.dto';
 import { Cat } from './interfaces/cat.interface';
-import { JoiValidationPipe } from 'src/common/validation/validation.pipe';
 
 // @Controller({ host: 'cats.example.com' }) // サブドメインの場合は、こんな感じすれば良いらしい
 
