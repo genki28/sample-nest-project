@@ -18,7 +18,7 @@ export class TransformInterceptor<T>
     context: ExecutionContext,
     next: CallHandler<T>,
   ): Observable<Response<T>> | Promise<Observable<Response<T>>> {
-    // 色々変換したりできる
+    // 色々便利に変換したりできるのです。interceptorなら
     return next.handle().pipe(
       map((data) => ({
         data,
