@@ -13,6 +13,7 @@ import {
   Redirect,
   UseFilters,
   UseGuards,
+  UseInterceptors,
   ValidationPipe,
 } from '@nestjs/common';
 import { HttpExceptionFilter } from '../common/exceptions/http-exception.filter';
@@ -20,13 +21,15 @@ import { ForbiddenException } from '../common/exceptions/forbidden.exception';
 import { CatsService } from './cats.service';
 import { CreateCatDto } from './dto/create-cat.dto';
 import { Cat } from './interfaces/cat.interface';
-import { RolesGuard } from '../common/auth/roles.guard';
+// import { RolesGuard } from '../common/auth/roles.guard';
+// import { LoggingInterceptor } from 'src/common/logging/logging.interceptor';
 
 // @Controller({ host: 'cats.example.com' }) // サブドメインの場合は、こんな感じすれば良いらしい
 
 // class内で定義されたすべてのルートハンドラーに対して設定できる(main.ts(エントリーポイント)にてすべてのルートハンドラーに対して設定することもできる)
 // @UseFilters(new HttpExceptionFilter())
-@UseGuards(RolesGuard)
+// @UseGuards(RolesGuard)
+// @UseInterceptors(LoggingInterceptor)
 @Controller('cats')
 export class CatsController {
   constructor(private catsService: CatsService) {}
