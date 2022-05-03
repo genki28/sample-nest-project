@@ -4,10 +4,11 @@ import {
   NestModule,
   // RequestMethod,
 } from '@nestjs/common';
-import { APP_FILTER } from '@nestjs/core';
+import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
 // import { CatsController } from './cats/cats.controller';
 import { CatsModule } from './cats/cats.module';
 import { HttpExceptionFilter } from './common/exceptions/http-exception.filter';
+import { LoggingInterceptor } from './common/logging/logging.interceptor';
 import {
   // LoggerMiddleware,
   logger,
@@ -18,6 +19,10 @@ import {
     {
       provide: APP_FILTER,
       useClass: HttpExceptionFilter,
+    },
+    {
+      provide: APP_INTERCEPTOR,
+      useClass: LoggingInterceptor,
     },
   ],
   imports: [CatsModule],
