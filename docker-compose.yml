@@ -2,7 +2,9 @@ version: '3.8'
 services:
   api:
     container_name: api
-    build: .
+    build:
+      context: .
+      dockerfile: ./docker/node/Dockerfile
     tty: true
     ports:
       - '3000:3000'
@@ -10,3 +12,35 @@ services:
       - type: bind
         source: .
         target: /src
+  mysql:
+    container_name: mysql
+    build:
+      context: .
+      dockerfile: ./docker/mysql/Dockerfile
+    hostname: mysql
+    ports:
+      - '3306:3306'
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: test_database
+      MYSQL_USER: docker
+      MYSQL_PASSWORD: docker
+      TZ: 'Asia/Tokyo'
+    command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci --skip-character-set-client-handshake
+    volumes:
+      - ./docker/mysql/data:/var/lib/mysql
+      - ./docker/mysql/my.conf:/etc/mysql/my.conf
+      - ./docker/mysql/init/:/docker-entrypoint-initdb.d
+    # security_opt:
+    #   - seccomp:uncofined
+
+  phpmyadmin:
+    container_name: phpmyadmin
+    image: phpmyadmin/phpmyadmin
+    environment:
+      - PMA_ARBITRARY=1
+      - PMA_HOSTS=mysql
+      - PMA_USER=docker
+      - PMA_PASSWORD=docker
+    ports:
+      - 8080:80
