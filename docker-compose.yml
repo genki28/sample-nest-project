@@ -1,7 +1,7 @@
 version: '3.8'
 services:
   api:
-    container_name: api
+    container_name: nest_api
     build:
       context: .
       dockerfile: ./docker/node/Dockerfile
@@ -13,7 +13,7 @@ services:
         source: .
         target: /src
   mysql:
-    container_name: mysql
+    container_name: nest_mysql
     build:
       context: .
       dockerfile: ./docker/mysql/Dockerfile
@@ -22,7 +22,7 @@ services:
       - '3306:3306'
     environment:
       MYSQL_ROOT_PASSWORD: root
-      MYSQL_DATABASE: test_database
+      MYSQL_DATABASE: sample_database
       MYSQL_USER: docker
       MYSQL_PASSWORD: docker
       TZ: 'Asia/Tokyo'
@@ -35,7 +35,7 @@ services:
     #   - seccomp:uncofined
 
   phpmyadmin:
-    container_name: phpmyadmin
+    container_name: nest_phpmyadmin
     image: phpmyadmin/phpmyadmin
     environment:
       - PMA_ARBITRARY=1
