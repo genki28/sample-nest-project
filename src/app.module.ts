@@ -15,6 +15,7 @@ import {
 } from './common/middleware/logger.middleware';
 import { UserController } from './user/user.controller';
 import { UserService } from './user/user.service';
+import { PostService } from './post/post.service';
 
 @Module({
   providers: [
@@ -27,6 +28,7 @@ import { UserService } from './user/user.service';
       useClass: LoggingInterceptor,
     },
     UserService,
+    PostService,
   ],
   imports: [CatsModule],
   controllers: [UserController],
