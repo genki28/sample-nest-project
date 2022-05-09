@@ -13,6 +13,9 @@ import {
   // LoggerMiddleware,
   logger,
 } from './common/middleware/logger.middleware';
+import { UserController } from './user/user.controller';
+import { UserService } from './user/user.service';
+import { PostService } from './post/post.service';
 
 @Module({
   providers: [
@@ -24,8 +27,11 @@ import {
       provide: APP_INTERCEPTOR,
       useClass: LoggingInterceptor,
     },
+    UserService,
+    PostService,
   ],
   imports: [CatsModule],
+  controllers: [UserController],
 })
 export class AppModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {

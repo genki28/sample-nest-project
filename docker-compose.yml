@@ -12,6 +12,9 @@ services:
       - type: bind
         source: .
         target: /src
+    networks:
+      - backend
+
   mysql:
     container_name: nest_mysql
     build:
@@ -33,6 +36,8 @@ services:
       - ./docker/mysql/init/:/docker-entrypoint-initdb.d
     # security_opt:
     #   - seccomp:uncofined
+    networks:
+      - backend
 
   phpmyadmin:
     container_name: nest_phpmyadmin
@@ -44,3 +49,9 @@ services:
       - PMA_PASSWORD=docker
     ports:
       - 8080:80
+
+networks:
+  backend:
+    driver: bridge
+    ipam:
+      driver: default
