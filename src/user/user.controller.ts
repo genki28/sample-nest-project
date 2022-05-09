@@ -8,7 +8,7 @@ export class UserController {
 
   @Post()
   async signupUser(
-    // Bodyをどうにかする
+    // Bodyをどうにかする. DTOで色々と操作しておきたい
     @Body() userData: { name: string; email: string },
   ): Promise<User> {
     return this.userService.createUser(userData);
