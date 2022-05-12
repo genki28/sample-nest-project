@@ -1,21 +1,12 @@
-import {
-  MiddlewareConsumer,
-  Module,
-  NestModule,
-  // RequestMethod,
-} from '@nestjs/common';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
-// import { CatsController } from './cats/cats.controller';
-import { CatsModule } from './cats/cats.module';
+import { GraphQLModule } from '@nestjs/graphql';
 import { HttpExceptionFilter } from './common/exceptions/http-exception.filter';
 import { LoggingInterceptor } from './common/logging/logging.interceptor';
-import {
-  // LoggerMiddleware,
-  logger,
-} from './common/middleware/logger.middleware';
+import { logger } from './common/middleware/logger.middleware';
 import { UserController } from './user/user.controller';
 import { UserService } from './user/user.service';
-import { PostService } from './post/post.service';
 
 @Module({
   providers: [
@@ -28,9 +19,15 @@ import { PostService } from './post/post.service';
       useClass: LoggingInterceptor,
     },
     UserService,
-    PostService,
   ],
-  imports: [CatsModule],
+  imports: [
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      // 諸々の設定可能
+      // debug: false,
+      // playground: false,
+    }),
+  ],
   controllers: [UserController],
 })
 export class AppModule implements NestModule {
