@@ -1,21 +1,13 @@
-import {
-  MiddlewareConsumer,
-  Module,
-  NestModule,
-  // RequestMethod,
-} from '@nestjs/common';
+import { ApolloDriver, ApolloDriverConfig } from '@nestjs/apollo';
+import { MiddlewareConsumer, Module, NestModule } from '@nestjs/common';
 import { APP_FILTER, APP_INTERCEPTOR } from '@nestjs/core';
-// import { CatsController } from './cats/cats.controller';
-import { CatsModule } from './cats/cats.module';
+import { GraphQLModule } from '@nestjs/graphql';
+import { join } from 'path';
 import { HttpExceptionFilter } from './common/exceptions/http-exception.filter';
 import { LoggingInterceptor } from './common/logging/logging.interceptor';
-import {
-  // LoggerMiddleware,
-  logger,
-} from './common/middleware/logger.middleware';
+import { logger } from './common/middleware/logger.middleware';
 import { UserController } from './user/user.controller';
 import { UserService } from './user/user.service';
-import { PostService } from './post/post.service';
 
 @Module({
   providers: [
@@ -28,9 +20,25 @@ import { PostService } from './post/post.service';
       useClass: LoggingInterceptor,
     },
     UserService,
-    PostService,
   ],
-  imports: [CatsModule],
+  imports: [
+    GraphQLModule.forRoot<ApolloDriverConfig>({
+      driver: ApolloDriver,
+      autoSchemaFile: join(process.cwd(), 'scr/schema.gql'),
+      // schemaファーストの場合は以下のように記述する
+      // TODO: これって、もう少し間違いなくできるようにならないだろうか？
+      // MEMO: なお、.graphqlスクリプトの監視モードを有効にするにはいくつかの設定は必要になる
+      // typePaths: ['./**/*.graphql'],
+
+      // 冗長になるので、以下のように抽象構文からts定義を自動生成するように設定可能
+      // definitions: {
+      //   path: join(process.cwd(), 'src/graphql.ts'),
+      // },
+      // 諸々の設定可能
+      // debug: false,
+      // playground: false,
+    }),
+  ],
   controllers: [UserController],
 })
 export class AppModule implements NestModule {
